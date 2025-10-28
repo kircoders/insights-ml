@@ -7,6 +7,7 @@ def validate_dataset(df, target_column):
     # Check if target exists
     if target_column not in df.columns:
         errors.append(f"Target column '{target_column}' not found in dataset.")
+        return errors
 
     # Check if we can actually analyze the dataset! If it has less than 5 rows, there's not
     # much to go off of 

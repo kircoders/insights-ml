@@ -1,6 +1,6 @@
 from analyze_insights import validate_dataset, clean_dataset, train_model, describe_dataset_columns
 
-def generate_gpt_prompt(model_info, df):
+def generate_gpt_prompt(model_info, df, user_question):
     problem_type = model_info["problem_type"]
     target = model_info["target_column"]
     model_name = model_info["model_used"]
@@ -37,7 +37,8 @@ You are analyzing a machine learning model trained using a Random Forest.
 ### Feature Importances:
 {feature_text}
 
-Based on this, summarize how this model works and what it's likely using to make predictions. Be clear, concise, and focus on what features matter most and why.
+### Now, the user wants to know the following:
+{user_question}
 """.strip()
 
     return prompt
