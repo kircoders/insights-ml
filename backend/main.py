@@ -13,32 +13,37 @@ from gpt_utils import ask_gpt
 
 app = FastAPI()
 
+latest_model_info = None
+latest_df = None
+
 @app.get("/")
 def read_root():
     return {"message": "Hello from FastAPI!"}
 
 @app.post("/analyze")
 async def analyze(
-    file: UploadFile = File(...), # tells FastAPI to expect a file field
-    target_column: str = Form(...) #tells FastAPI to expect something from a form
+    file: UploadFile = File(...),  # tells FastAPI to expect a file field
+    target_column: str = Form(...) # tells FastAPI to expect something from a form
 ):
     contents = await file.read()
 
     # Convert bytes into a pandas DataFrame
     try:
-        import pandas as pd
         df = pd.read_csv(pd.io.common.BytesIO(contents))
     except Exception:
         raise HTTPException(status_code=400, detail="Invalid CSV file")
    
     errors = validate_dataset(df, target_column)
-
     if errors:
         raise HTTPException(status_code=400, detail=errors)
-    else:
-        X_clean, y = clean_dataset(df, target_column)
-        result = train_model(X_clean, y, target_column)
-    
+
+    X_clean, y = clean_dataset(df, target_column)
+    result = train_model(X_clean, y, target_column)
+
+    global latest_model_info, latest_df
+    latest_model_info = result
+    latest_df = df
+
     return result
 
 
