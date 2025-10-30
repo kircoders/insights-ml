@@ -1,6 +1,7 @@
 import sys
 import os
 from io import BytesIO
+from fastapi.middleware.cors import CORSMiddleware
 
 # Add the parent directory (Insights/) to the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -12,6 +13,15 @@ from create_gpt_prompt import generate_gpt_prompt
 from gpt_utils import ask_gpt
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # or ["*"] for all
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 latest_model_info = None
 latest_df = None
