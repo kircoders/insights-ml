@@ -19,7 +19,7 @@ function App() {
     analyzeForm.append("file", file);
     analyzeForm.append("target_column", targetColumn);
 
-    const analyzeRes = await fetch("http://localhost:8000/analyze", {
+    const analyzeRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/analyze`, {
       method: "POST",
       body: analyzeForm,
     });
@@ -36,7 +36,7 @@ function App() {
     const askForm = new FormData();
     askForm.append("question", question);
 
-    const askRes = await fetch("http://localhost:8000/ask", {
+    const askRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/ask`, {
       method: "POST",
       body: askForm,
     });
