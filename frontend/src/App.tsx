@@ -1,60 +1,65 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-function App() {
+const App: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [targetColumn, setTargetColumn] = useState('');
   const [question, setQuestion] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (!file || !targetColumn || !question) {
-    alert("Please fill out all fields!");
-    return;
-  }
-
-  try {
-    // STEP 1: Send to /analyze
-    const analyzeForm = new FormData();
-    analyzeForm.append("file", file);
-    analyzeForm.append("target_column", targetColumn);
-
-    const analyzeRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/analyze`, {
-      method: "POST",
-      body: analyzeForm,
-    });
-
-    if (!analyzeRes.ok) {
-      const error = await analyzeRes.json();
-      throw new Error(error.detail || "Failed to analyze dataset");
+    if (!file || !targetColumn || !question) {
+      alert("Please fill out all fields!");
+      return;
     }
 
-    const analyzeData = await analyzeRes.json();
-    console.log("✅ /analyze success:", analyzeData);
+    try {
+      // STEP 1: Send to /analyze
+      const analyzeForm = new FormData();
+      analyzeForm.append("file", file);
+      analyzeForm.append("target_column", targetColumn);
 
-    // STEP 2: Send to /ask
-    const askForm = new FormData();
-    askForm.append("question", question);
+      const analyzeRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/analyze`, {
+        method: "POST",
+        body: analyzeForm,
+      });
 
-    const askRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/ask`, {
-      method: "POST",
-      body: askForm,
-    });
+      if (!analyzeRes.ok) {
+        const error = await analyzeRes.json();
+        throw new Error(error.detail || "Failed to analyze dataset");
+      }
 
-    if (!askRes.ok) {
-      const error = await askRes.json();
-      throw new Error(error.detail || "Failed to ask GPT");
-    }
+      const analyzeData = await analyzeRes.json();
+      console.log("✅ /analyze success:", analyzeData);
 
-    const askData = await askRes.json();
-    console.log("✅ /ask success:", askData);
+      // STEP 2: Send to /ask
+      const askForm = new FormData();
+      askForm.append("question", question);
 
-    // Show result to user
-    alert("GPT says:\n\n" + askData.answer);
+      const askRes = await fetch(`${import.meta.env.VITE_BACKEND_URL}/ask`, {
+        method: "POST",
+        body: askForm,
+      });
+
+      if (!askRes.ok) {
+        const error = await askRes.json();
+        throw new Error(error.detail || "Failed to ask GPT");
+      }
+
+      const askData = await askRes.json();
+      console.log("✅ /ask success:", askData);
+
+      // Show result to user
+      if (!askData.answer) {
+        throw new Error("No answer field found in backend response.");
+      }
+
+      alert("💡 GPT says:\n\n" + askData.answer);
+
     } catch (err: any) {
       alert("❌ Error: " + err.message);
     }
-};
+  };
 
   return (
     <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
@@ -103,6 +108,6 @@ function App() {
       </form>
     </div>
   );
-}
+};
 
 export default App;

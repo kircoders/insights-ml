@@ -19,7 +19,7 @@ def get_sample_csv_bytes():
     return io.BytesIO(csv_content.encode("utf-8"))
 
 
-def test_root_endpoint():
+def test_root_endpoint_analyze():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Hello from FastAPI!"}
