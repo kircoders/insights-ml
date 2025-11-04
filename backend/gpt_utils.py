@@ -1,12 +1,15 @@
 from openai import OpenAI
 import os
-from dotenv import load_dotenv
 
-# Load environment variables from .env
-load_dotenv()
+# Only load .env locally, not in CI
+if os.getenv("ENV", "development") == "development":
+    from dotenv import load_dotenv
+    load_dotenv()
 
-# Initialize OpenAI client with API key
-client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
+# This will raise an error if the key is missing (good!)
+api_key = os.environ["OPENAI_API_KEY"]
+
+client = OpenAI(api_key=api_key)
 
 def ask_gpt(prompt: str) -> str:
     response = client.chat.completions.create(
