@@ -69,8 +69,9 @@ const App: React.FC = () => {
       <form onSubmit={handleSubmit}>
         {/* File input */}
         <div style={{ marginTop: '2rem' }}>
-          <label>CSV File: </label>
+          <label htmlFor="csv-file">CSV File: </label>
           <input
+            id="csv-file"
             type="file"
             accept=".csv"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
@@ -79,8 +80,9 @@ const App: React.FC = () => {
 
         {/* Question input */}
         <div style={{ marginTop: '2rem' }}>
-          <label>What question do you have about your dataset? </label>
+          <label htmlFor="question">What question do you have about your dataset? </label>
           <input
+            id="question"
             type="text"
             placeholder="e.g. Does hours studied impact final_score?"
             value={question}
@@ -91,8 +93,9 @@ const App: React.FC = () => {
 
         {/* Target column input */}
         <div style={{ marginTop: '2rem' }}>
-          <label>Target Column: </label>
+          <label htmlFor="target-column">Target Column: </label>
           <input
+            id="target-column"
             type="text"
             placeholder="e.g. final_score"
             value={targetColumn}
