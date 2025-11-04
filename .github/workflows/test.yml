@@ -30,6 +30,7 @@ jobs:
 
       - name: Run backend tests
         run: |
+          export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
           pytest backend/test_backend
 
   test-frontend:
