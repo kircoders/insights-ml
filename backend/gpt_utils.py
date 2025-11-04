@@ -6,12 +6,9 @@ if os.getenv("ENV", "development") == "development":
     from dotenv import load_dotenv
     load_dotenv()
 
-# This will raise an error if the key is missing (good!)
-api_key = os.environ["OPENAI_API_KEY"]
-
-client = OpenAI(api_key=api_key)
-
 def ask_gpt(prompt: str) -> str:
+    api_key = os.environ["OPENAI_API_KEY"]  # Moved here
+    client = OpenAI(api_key=api_key)
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
