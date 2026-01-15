@@ -55,3 +55,15 @@ def test_analyze_missing_target_column():
     data = response.json()
     assert "detail" in data
     assert "Target column" in str(data["detail"][0])
+
+# INTEGRATION TESTS — /ask ENDPOINT
+#
+# These tests verify the full multi-step workflow:
+# 1. A dataset is analyzed using /analyze
+# 2. The resulting model state is stored in memory
+# 3. A follow-up question is sent to /ask
+# 4. The backend generates a GPT prompt and returns an answer
+#
+# These tests confirm that endpoint dependencies and application
+# state behave correctly across requests.
+

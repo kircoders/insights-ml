@@ -71,3 +71,19 @@ def test_analyze_with_invalid_csv():
 
     assert response.status_code == 400
     assert "Target column 'final_score' not found in dataset." in response.json()["detail"]
+
+# INTEGRATION TESTS — /analyze ENDPOINT
+#
+# These tests verify that the dataset analysis workflow works end-to-end:
+# - CSV upload handling
+# - Dataset validation
+# - Feature cleaning
+# - Model training
+# - Structured JSON response
+#
+# They also ensure the API fails gracefully when given invalid input
+# (missing target column or malformed datasets).
+#
+# These tests use FastAPI's TestClient to simulate real HTTP requests
+# without starting an actual web server.
+
